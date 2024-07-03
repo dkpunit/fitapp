@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///workouts.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///workouts.db'
 db = SQLAlchemy(app)
 
 class Workout(db.Model):
@@ -14,33 +13,18 @@ class Workout(db.Model):
     weight = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
 
-@app.before_first_request
-def create_tables():
+# Initialize the database
+with app.app_context():
     db.create_all()
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
-
 @app.route('/results', methods=['POST'])
 def results():
-    exercise = request.form['exercise']
-    sets = request.form['sets']
-    reps = request.form['reps']
-    weight = request.form['weight']
-    date = request.form['date']
-    new_workout = Workout(exercise=exercise, sets=sets, reps=reps, weight=weight, date=date)
-    db.session.add(new_workout)
-    db.session.commit()
-    return redirect(url_for('dashboard'))
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error.html', error_message="Page not found"), 404
+    # Your code for handling form submission and displaying results
+    pass
 
 if __name__ == '__main__':
     app.run(debug=True)
