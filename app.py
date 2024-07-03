@@ -11,6 +11,40 @@ def before_request():
         if not request.is_secure:
             return redirect(request.url.replace("http://", "https://", 1), code=301)
 
+def calculate_bmi(weight, height, unit, height_unit):
+    if unit in ('lbs', 'lb', 'pound', 'pounds'):
+        weight /= 2.205
+    if height_unit in ('cm', 'centimeter', 'centimeters'):
+        height /= 100
+    bmi = weight / (height ** 2)
+    if bmi < 16:
+        return bmi, "severely underweight"
+    elif 16 <= bmi < 18.5:
+        return bmi, "underweight"
+    elif 18.5 <= bmi < 25:
+        return bmi, "healthy"
+    elif 25 <= bmi < 30:
+        return bmi, "overweight"
+    else:
+        return bmi, "obese"
+
+def calculate_bmr(gender, age, weight, height, unit, height_unit):
+    if unit in ('lbs', 'lb', 'pound', 'pounds'):
+        weight /= 2.205
+    if height_unit in ('cm', 'centimeter', 'centimeters'):
+        height /= 100
+    if gender == "male":
+        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age + 5
+    else:
+        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age - 161
+    return bmr
+
+def calculate_caloric_intake(bmr, act_lvl, gain_or_lose):
+    if gain_or_lose == "gain":
+        return round(bmr * act_lvl * 1.20)
+    elif gain_or_lose == "lose":
+        return round(bmr * act_lvl * 0.80)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -19,23 +53,8 @@ def index():
 def fitapp():
     return render_template('fitapp.html')
 
-@app.route('/dashboard')
-def dashboard():
-    subprocess.Popen(["streamlit", "run", "dashboard.py"])
-    return redirect("http://localhost:8501")
-
-if __name__ == "__main__":
-    app.run()
-
-# Home route
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-# Results route
 @app.route('/results', methods=['POST'])
 def results():
-    # Your existing results logic here
     name = request.form['name'].strip().lower()
     unit = request.form['unit'].strip().lower()
     weight = float(request.form['weight'])
@@ -71,39 +90,10 @@ def results():
 
     return render_template('results.html', name=name, bmi=f"{bmi:.1f}", bmi_status=bmi_status, bmr=f"{bmr:.1f}", tdee=tdee, caloric_intake=caloric_intake)
 
-def calculate_bmi(weight, height, unit, height_unit):
-    if unit in ('lbs', 'lb', 'pound', 'pounds'):
-        weight /= 2.205
-    if height_unit in ('cm', 'centimeter', 'centimeters'):
-        height /= 100
-    bmi = weight / (height ** 2)
-    if bmi < 16:
-        return bmi, "severely underweight"
-    elif 16 <= bmi < 18.5:
-        return bmi, "underweight"
-    elif 18.5 <= bmi < 25:
-        return bmi, "healthy"
-    elif 25 <= bmi < 30:
-        return bmi, "overweight"
-    else:
-        return bmi, "obese"
-
-def calculate_bmr(gender, age, weight, height, unit, height_unit):
-    if unit in ('lbs', 'lb', 'pound', 'pounds'):
-        weight /= 2.205
-    if height_unit in ('cm', 'centimeter', 'centimeters'):
-        height /= 100
-    if gender == "male":
-        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age + 5
-    else:
-        bmr = 10 * weight + 6.25 * (height * 100) - 5 * age - 161
-    return bmr
-
-def calculate_caloric_intake(bmr, act_lvl, gain_or_lose):
-    if gain_or_lose == "gain":
-        return round(bmr * act_lvl * 1.20)
-    elif gain_or_lose == "lose":
-        return round(bmr * act_lvl * 0.80)
+@app.route('/dashboard')
+def dashboard():
+    subprocess.Popen(["streamlit", "run", "dashboard.py"])
+    return redirect("http://localhost:8501")
 
 if __name__ == "__main__":
     app.run()
