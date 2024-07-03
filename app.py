@@ -2,6 +2,7 @@ from string import punctuation
 from flask import Flask, request, redirect, render_template
 import os
 import subprocess
+import streamlit as st
 
 app = Flask(__name__)
 
@@ -90,10 +91,17 @@ def results():
 
     return render_template('results.html', name=name, bmi=f"{bmi:.1f}", bmi_status=bmi_status, bmr=f"{bmr:.1f}", tdee=tdee, caloric_intake=caloric_intake)
 
+@app.route('/')
+def index():
+    return redirect('/dashboard')
+
 @app.route('/dashboard')
 def dashboard():
-    subprocess.Popen(["streamlit", "run", "dashboard.py"])
-    return redirect("http://localhost:8501")
+    st.set_page_config(page_title="Fitness Dashboard", layout="wide")
+    st.title("Fitness Dashboard")
+    st.write("Welcome to the Fitness Dashboard")
+    st.sidebar.title("Navigation")
+    st.sidebar.radio("Go to", ["Home", "Analytics", "Settings"])
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run()
