@@ -5,6 +5,7 @@ import pandas as pd
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///workouts.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Workout(db.Model):
@@ -37,6 +38,10 @@ def results():
     with db.engine.connect() as connection:  # Correct way to use the engine with pandas
         df = pd.read_sql_table('workout', con=connection)
     return render_template('results.html', tables=[df.to_html(classes='data')], titles=df.columns.values)
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
