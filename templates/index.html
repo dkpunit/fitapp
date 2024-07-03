@@ -1,54 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 12pt;
-        }
-        label, input {
-            display: block;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Fitness App</h1>
-    <form action="/results" method="post">
-        <label for="name">What is your name?:</label>
-        <input type="text" id="name" name="name"><br><br>
-        
-        <label for="unit">Preferred weight unit (Kg/Lbs):</label>
-        <input type="text" id="unit" name="unit"><br><br>
-        
-        <label for="weight">What is your weight?:</label>
-        <input type="text" id="weight" name="weight"><br><br>
-        
-        <label for="height_unit">Preferred height unit (cm/m):</label>
-        <input type="text" id="height_unit" name="height_unit"><br><br>
-        
-        <label for="height">What is your height?:</label>
-        <input type="text" id="height" name="height"><br><br>
-        
-        <label for="age">What is your age?:</label>
-        <input type="text" id="age" name="age"><br><br>
-        
-        <label for="gender">What is your gender (male/female)?:</label>
-        <input type="text" id="gender" name="gender"><br><br>
-        
-        <label for="goal">Do you want to gain or lose weight (gain/lose)?:</label>
-        <input type="text" id="goal" name="goal"><br><br>
-        
-        <label for="goal_weight">What is your goal weight?:</label>
-        <input type="text" id="goal_weight" name="goal_weight"><br><br>
-        
-        <label for="act_lvl">What is your activity level (1.2 - 2.2)?:</label>
-        <input type="text" id="act_lvl" name="act_lvl"><br><br>
-        
-        <input type="submit" value="Calculate">
-    </form>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to My App</h1>
+<p>This is the homepage.</p>
+{% endblock %}
