@@ -1,19 +1,15 @@
 from flask import Flask, request, redirect, render_template
 from string import punctuation
 import subprocess
-
-app = Flask(__name__)
-
-# Redirect HTTP to HTTPS and redirect non-www to www
-from flask import Flask, request, redirect, render_template
-import subprocess
+import os
 
 app = Flask(__name__)
 
 @app.before_request
 def before_request():
-    if not request.is_secure:
-        return redirect(request.url.replace("http://", "https://", 1), code=301)
+    if 'DYNO' in os.environ:  # Only redirect on Heroku
+        if not request.is_secure:
+            return redirect(request.url.replace("http://", "https://", 1), code=301)
 
 @app.route('/')
 def index():
