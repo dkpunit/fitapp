@@ -1,25 +1,19 @@
 import streamlit as st
+import pandas as pd
+import sqlite3
 
-st.title("Fitness Dashboard")
+st.title('Fitness Tracker Dashboard')
 
-st.sidebar.header("User Input Parameters")
+# Connect to SQLite database
+conn = sqlite3.connect('workouts.db')
+df = pd.read_sql_query("SELECT * FROM workout", conn)
 
-def user_input():
-    name = st.sidebar.text_input("Name", "John Doe")
-    weight = st.sidebar.number_input("Weight (kg)", min_value=0, value=70)
-    height = st.sidebar.number_input("Height (cm)", min_value=0, value=175)
-    age = st.sidebar.number_input("Age", min_value=0, value=25)
-    gender = st.sidebar.selectbox("Gender", ("Male", "Female"))
-    activity_level = st.sidebar.selectbox("Activity Level", ("Sedentary", "Lightly active", "Moderately active", "Very active", "Super active"))
-    goal = st.sidebar.selectbox("Goal", ("Lose weight", "Maintain weight", "Gain weight"))
-    return name, weight, height, age, gender, activity_level, goal
+st.write("## Workouts Data")
+st.dataframe(df)
 
-name, weight, height, age, gender, activity_level, goal = user_input()
+st.write("## Summary Statistics")
+st.write(df.describe())
 
-st.write(f"Name: {name}")
-st.write(f"Weight: {weight} kg")
-st.write(f"Height: {height} cm")
-st.write(f"Age: {age}")
-st.write(f"Gender: {gender}")
-st.write(f"Activity Level: {activity_level}")
-st.write(f"Goal: {goal}")
+# Visualizations
+st.write("## Visualizations")
+chart = st.bar_chart(df[['exercise', 'weight']].groupby('exercise').mean())

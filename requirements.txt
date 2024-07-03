@@ -1,7 +1,8 @@
-Flask
-Flask-SQLAlchemy
-gunicorn
-pandas
+Flask==3.0.3
+Flask-SQLAlchemy==2.5.1
+pandas==2.2.2
+gunicorn==22.0.0
+streamlit==1.36.0
 plotly
 altair==5.3.0
 attrs==23.2.0
@@ -13,7 +14,6 @@ click==8.1.7
 colorama==0.4.6
 gitdb==4.0.11
 GitPython==3.1.43
-gunicorn==22.0.0
 idna==3.7
 itsdangerous==2.2.0
 Jinja2==3.1.4
@@ -24,7 +24,6 @@ MarkupSafe==2.1.5
 mdurl==0.1.2
 numpy==2.0.0
 packaging==24.1
-pandas==2.2.2
 pillow==10.3.0
 protobuf==5.27.2
 pyarrow==16.1.0
@@ -38,7 +37,6 @@ rich==13.7.1
 rpds-py==0.18.1
 six==1.16.0
 smmap==5.0.1
-streamlit==1.36.0
 tenacity==8.4.2
 toml==0.10.2
 toolz==0.12.1

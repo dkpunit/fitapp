@@ -2,25 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}My App{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>{% block title %}Fitness Tracker{% endblock %}</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <!-- Navigation links -->
-            <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('results') }}">Results</a></li>
+        </ul>
+    </nav>
+    <div>
         {% block content %}{% endblock %}
-    </main>
-    <footer>
-        <!-- Footer content -->
-        <p>&copy; 2024 My App</p>
-    </footer>
+    </div>
 </body>
 </html>

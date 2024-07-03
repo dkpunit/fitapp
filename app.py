@@ -1,7 +1,8 @@
+import sqlite3
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-import pandas as pd
 import os
+import pandas as pd
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///workouts.db'
@@ -39,10 +40,15 @@ def results():
     df = pd.read_sql_table('workout', con=db.engine)
     return render_template('results.html', workouts=workouts, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
-@app.before_request
+@app.route('/dashboard')
+def dashboard():
+    conn = sqlite3.connect('workouts.db')
+    df = pd.read_sql_query("SELECT * FROM workout", conn)
+    return render_template('dashboard.html', tables=[df.to_html(classes='data')], titles=df.columns.values)
+
+@app.before_first_request
 def create_tables():
-    if not os.path.exists('workouts.db'):
-        db.create_all()
+    db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True)
