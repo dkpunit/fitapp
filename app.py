@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import pandas as pd
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///workouts.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Workout(db.Model):
@@ -13,18 +16,33 @@ class Workout(db.Model):
     weight = db.Column(db.Float, nullable=False)
     date = db.Column(db.Date, nullable=False)
 
-# Initialize the database
-with app.app_context():
-    db.create_all()
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/results', methods=['POST'])
+@app.route('/add', methods=['POST'])
+def add_workout():
+    exercise = request.form.get('exercise')
+    sets = request.form.get('sets')
+    reps = request.form.get('reps')
+    weight = request.form.get('weight')
+    date = request.form.get('date')
+
+    new_workout = Workout(exercise=exercise, sets=sets, reps=reps, weight=weight, date=date)
+    db.session.add(new_workout)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route('/results')
 def results():
-    # Your code for handling form submission and displaying results
-    pass
+    workouts = Workout.query.all()
+    df = pd.read_sql_table('workout', con=db.engine)
+    return render_template('results.html', workouts=workouts, tables=[df.to_html(classes='data')], titles=df.columns.values)
+
+@app.before_request
+def create_tables():
+    if not os.path.exists('workouts.db'):
+        db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True)
