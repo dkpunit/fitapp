@@ -1,9 +1,7 @@
 import streamlit as st
 
-# Title of the dashboard
 st.title("Fitness Dashboard")
 
-# Sidebar inputs
 st.sidebar.header("User Input Parameters")
 
 def user_input():
@@ -18,7 +16,6 @@ def user_input():
 
 name, weight, height, age, gender, activity_level, goal = user_input()
 
-# Main content
 st.write(f"Name: {name}")
 st.write(f"Weight: {weight} kg")
 st.write(f"Height: {height} cm")
@@ -26,5 +23,3 @@ st.write(f"Age: {age}")
 st.write(f"Gender: {gender}")
 st.write(f"Activity Level: {activity_level}")
 st.write(f"Goal: {goal}")
-
-# Add more content or visualizations here

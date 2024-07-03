@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, render_template
 from string import punctuation
+import subprocess
 
 app = Flask(__name__)
 
@@ -8,8 +9,22 @@ app = Flask(__name__)
 def before_request():
     if not request.is_secure:
         return redirect(request.url.replace("http://", "https://", 1), code=301)
-    elif request.host == "davepunit.com":
-        return redirect(f"https://www.davepunit.com{request.full_path}", code=301)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/fitapp')
+def fitapp():
+    return render_template('fitapp.html')
+
+@app.route('/dashboard')
+def dashboard():
+    subprocess.Popen(["streamlit", "run", "dashboard.py"])
+    return redirect("http://localhost:8501")
+
+if __name__ == "__main__":
+    app.run(ssl_context=('cert.pem', 'key.pem'))
 
 # Home route
 @app.route('/')
