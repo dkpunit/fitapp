@@ -1,7 +1,7 @@
-from flask import Flask, request, redirect, render_template
 from string import punctuation
-import subprocess
+from flask import Flask, request, redirect, render_template
 import os
+import subprocess
 
 app = Flask(__name__)
 
