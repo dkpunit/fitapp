@@ -5,6 +5,11 @@ import subprocess
 app = Flask(__name__)
 
 # Redirect HTTP to HTTPS and redirect non-www to www
+from flask import Flask, request, redirect, render_template
+import subprocess
+
+app = Flask(__name__)
+
 @app.before_request
 def before_request():
     if not request.is_secure:
@@ -24,7 +29,7 @@ def dashboard():
     return redirect("http://localhost:8501")
 
 if __name__ == "__main__":
-    app.run(ssl_context=('cert.pem', 'key.pem'))
+    app.run()
 
 # Home route
 @app.route('/')
